@@ -16,7 +16,6 @@ class StockPickingBatchInherited(models.Model):
     def update_vehicle_category(self):
         self.vehicle_category_id = self.vehicle_id.category_id
 
-    # compute methods
     def _compute_weight(self):
         tot = 0.0
         for batch in self:

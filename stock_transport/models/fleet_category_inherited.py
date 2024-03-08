@@ -8,7 +8,7 @@ class FleetCategoryInherited(models.Model):
 
     #compute methods
     @api.depends("max_weight", "max_volume")
-    def _compute_display_name(self): #Magic
+    def _compute_display_name(self):
         for record in self: 
             name = record.name
             if record.max_weight and record.max_volume:
