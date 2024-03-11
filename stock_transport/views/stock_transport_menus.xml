@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="transport_management_root" name="Docks">
+        <menuitem id="dock_menu_action" action="dock_action" name="Docks"/>
+    </menuitem>
+</odoo>

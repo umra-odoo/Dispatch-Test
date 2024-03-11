@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="stock.res_config_settings_view_form"></field>
         <field name="arch" type="xml">
             <xpath expr="//block[@name='shipping_setting_container']" position="inside">
-                <setting id="transport_management" help="Compute stock transport costs" title="Transport management allow to compute accurate transport costs, keep track of wieghts and volume of each move line as well as of the batch.">
+                <setting id="stock_transport" help="Compute stock transport costs" title="Install stock transport">
                     <field name="module_transport_management"/>
                 </setting>
             </xpath>

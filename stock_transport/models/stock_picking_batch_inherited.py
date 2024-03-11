@@ -4,11 +4,12 @@ from odoo import fields, models, api
 class StockPickingBatchInherited(models.Model):
     _inherit = "stock.picking.batch"
 
+
     dock_id = fields.Many2one(comodel_name="dock", string="Dock Name")
     vehicle_id = fields.Many2one(comodel_name="fleet.vehicle", string="Vehicle")
+    weight = fields.Float(string="Weight", compute="_compute_weight", readonly=True)
+    volume = fields.Float(string="Volume", compute="_compute_volume", readonly=True)
     vehicle_category_id = fields.Many2one(comodel_name="fleet.vehicle.model.category", string="Vehicle Category")
-    weight = fields.Float(string="Weight", compute="_compute_weight", readonly=True, store=True)
-    volume = fields.Float(string="Volume", compute="_compute_volume", readonly=True, store=True)
     transfer = fields.Integer(string="Transfer", compute="_compute_transfer", store=True)
     line = fields.Integer(string="Line", compute="_compute_line", store=True)
 
@@ -16,6 +17,7 @@ class StockPickingBatchInherited(models.Model):
     def update_vehicle_category(self):
         self.vehicle_category_id = self.vehicle_id.category_id
 
+   
     def _compute_weight(self):
         tot = 0.0
         for batch in self:
@@ -40,7 +42,6 @@ class StockPickingBatchInherited(models.Model):
         else:
             self.volume = 0
 
-
     @api.depends("picking_ids")
     def _compute_transfer(self):
         for record in self:
@@ -50,3 +51,19 @@ class StockPickingBatchInherited(models.Model):
     def _compute_line(self):
         for record in self:
             record.line = len(record.move_ids)
+
+
+    # Compute name
+    @api.depends("weight", "volume")
+    def _compute_display_name(self):
+        for record in self:
+            name = record.name
+            weight_str = f"{record.weight:.2f}" if record.weight else ""
+            volume_str = f"{record.volume:.2f}" if record.volume else ""
+            if weight_str and volume_str:
+                name = f"{record.name} ({weight_str} Kg), ({volume_str} m^3)"
+            elif weight_str:
+                name = f"{record.name} ({weight_str} Kg)"
+            elif volume_str:
+                name = f"{record.name} ({volume_str} m^3)"
+            record.display_name = name
